@@ -6,12 +6,15 @@ import { applyTextEffect, Variant } from "./textEffects";
 import type { Variant as TextEffectVariant } from "./textEffects";
 
 // Create a bot using the Telegram token
-const bot = new Bot(process.env.TELEGRAM_TOKEN || "5636410216:AAFogcPKfeTojq9IEAnMVDs7RrVGEZybHJM");
+const bot = new Bot(process.env.TELEGRAM_TOKEN || "");
 
 // Handle the /yo command to greet the user
 bot.command("yo", (ctx) => ctx.reply(`Bo-Bo-Bo ${ctx.from?.username}`));
-bot.command("date", (ctx) => console.log(ctx));
-bot.on('message', (ctx) => console.log(ctx));
+/*bot.command("date", (ctx) => {
+  console.log(ctx)
+  return ctx.reply(`${new Date(`${ctx.message?.date}`)}`);
+});*/
+//bot.on('message', (ctx) => console.log(ctx));
 // Handle the /effect command to apply text effects using an inline keyboard
 type Effect = { code: TextEffectVariant; label: string };
 const allEffects: Effect[] = [
@@ -165,6 +168,7 @@ bot.api.setMyCommands([
     command: "effect",
     description: "Apply text effects on the text. (usage: /effect [text])",
   },
+  { command: "date", description: "Show numbers" },
 ]);
 
 // Handle all other messages and the /start command
@@ -176,8 +180,34 @@ const replyWithIntro = (ctx: any) =>
     parse_mode: "HTML",
   });
 
-bot.command("start", replyWithIntro);
-bot.on("message", replyWithIntro);
+//bot.command("start", replyWithIntro);
+//bot.on("message", replyWithIntro);
+
+bot.on("message", async (ctx) => {
+  console.log(`form test---------------`, ctx);
+  const ID = ctx.chat.id;
+  const NAME = ctx.from.first_name;
+  const DATE = ctx.update.message.date;
+  const TEXT = ctx.update.message.text;
+  switch (TEXT) {
+    case `/start`:
+      await bot.api.sendMessage(
+        ID,
+        `Вітаю, я кібер Ігар, буду дапамагаць вам рэпітаваць!`
+      );
+      await bot.api.sendSticker(
+        ID,
+        `https://tlgrm.eu/_/stickers/1b5/0ab/1b50abf8-8451-40ca-be37-ffd7aa74ec4d/2.webp`
+      );
+      break;
+      case `/date`:
+        await bot.api.sendMessage(
+          ID,
+          `${NAME} даслаў паведамленне ${new Date(DATE)}`
+        );
+        break;
+  }
+});
 
 // Start the server
 if (process.env.NODE_ENV === "production") {

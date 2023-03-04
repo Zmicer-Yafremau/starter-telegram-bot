@@ -6,10 +6,10 @@ import { applyTextEffect, Variant } from "./textEffects";
 import type { Variant as TextEffectVariant } from "./textEffects";
 
 // Create a bot using the Telegram token
-const bot = new Bot(process.env.TELEGRAM_TOKEN || "");
+const bot = new Bot(process.env.TELEGRAM_TOKEN || "5636410216:AAFogcPKfeTojq9IEAnMVDs7RrVGEZybHJM");
 
 // Handle the /yo command to greet the user
-bot.command("yo", (ctx) => ctx.reply(`Yo-yo-yo ${ctx.from?.username}`));
+bot.command("yo", (ctx) => ctx.reply(`Bo-Bo-Bo ${ctx.from?.username}`));
 bot.command("date", (ctx) => console.log(ctx));
 bot.on('message', (ctx) => console.log(ctx));
 // Handle the /effect command to apply text effects using an inline keyboard
